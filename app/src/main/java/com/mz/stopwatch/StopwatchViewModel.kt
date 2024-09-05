@@ -53,12 +53,20 @@ class StopwatchViewModel(
         _startState.update { true }
         _startStop.update { false }
         job?.cancel()
+        job = null
     }
 
     fun reset() {
-        stop()
-        time.update { 0 }
-        start()
+        job?.let {
+            stop()
+            time.update { 0 }
+            start()
+        } ?: run {
+            stop()
+            time.update { 0 }
+        }
+
+
     }
 
     private fun format(time: Long): String {

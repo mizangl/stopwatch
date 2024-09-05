@@ -56,13 +56,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier,
     time: State<String>,
     startState: State<Boolean>,
     stopState: State<Boolean>,
     onStart: () -> Unit,
     onStop: () -> Unit,
-    onReset: () -> Unit
+    onReset: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,13 +73,43 @@ fun MainScreen(
     ) {
         Spacer(modifier = Modifier.padding(32.dp))
 
-        Text(
-            fontSize = 25.sp,
-            text = time.value,
-        )
+        StopwatchDisplay(time = time)
 
         Spacer(modifier = Modifier.padding(32.dp))
 
+
+        StopwatchButton(
+            startState =startState,
+            stopState =stopState,
+            onStart = onStart,
+            onStop = onStop,
+            onReset = onReset)
+
+
+    }
+}
+
+@Composable
+fun StopwatchDisplay(
+    time: State<String>,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        fontSize = 25.sp,
+        text = time.value,
+    )
+}
+
+@Composable
+fun StopwatchButton(
+    startState: State<Boolean>,
+    stopState: State<Boolean>,
+    onStart: () -> Unit,
+    onStop: () -> Unit,
+    onReset: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column {
         Button(
             enabled = startState.value,
             onClick = onStart
@@ -113,10 +143,10 @@ fun GreetingPreview() {
         MainScreen(
             time = mutableStateOf("00:00:00"),
             startState = mutableStateOf(true),
-            stopState =  mutableStateOf(true),
-            onStart = {  },
-            onStop = {  },
-            onReset = {  }
-            )
+            stopState = mutableStateOf(true),
+            onStart = { },
+            onStop = { },
+            onReset = { }
+        )
     }
 }
