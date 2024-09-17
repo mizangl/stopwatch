@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
+import java.util.Locale
 
 class StopwatchViewModel(
 
@@ -42,9 +45,10 @@ class StopwatchViewModel(
 
         job = viewModelScope.launch {
             val start = System.currentTimeMillis() - time.value
-            while (true) {
+            while (isActive) {
                 time.update { System.currentTimeMillis() - start }
                 delay(10)
+                yield()
             }
         }
     }
@@ -73,6 +77,6 @@ class StopwatchViewModel(
         val seconds = (time / 1000) % 60
         val minutes = (time / 1000) / 60
         val milliseconds = (time % 1000) / 10
-        return String.format("%02d:%02d:%02d", minutes, seconds, milliseconds)
+        return String.format(Locale.ROOT,"%02d:%02d:%02d", minutes, seconds, milliseconds)
     }
 }
